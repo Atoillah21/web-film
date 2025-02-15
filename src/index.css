@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/* img{
+    height: 430px
+} */
+
+.date {
+    font-style: italic
+}
