@@ -3,17 +3,11 @@ import { useEffect } from "react";
 import { getMovieList, searchMovie } from "../api";
 import { useState } from "react";
 
-const Wrapper = () => {
+const Wrapper = (props) => {
+  // const [popular] = props
   const imgUrl = import.meta.env.VITE_BASEIMGURL;
 
-  const [popular, setPopular] = useState([]);
-
-  useEffect(() => {
-    getMovieList().then((result) => {
-      setPopular(result);
-    });
-  }, []);
-
+ const popular = props.popular
   // const popularMovieList = () => {
   //   return popular.map((movie, i) => {
   //     return (
@@ -31,7 +25,7 @@ const Wrapper = () => {
 
   return (
     <>
-      {popular.map((movie, i) => {
+      {popular?.map((movie, i) => {
         return (
           <div
             key={i}
@@ -40,7 +34,7 @@ const Wrapper = () => {
             <div className="font-semibold">{movie.title}</div>
             <img src={`${imgUrl}/${movie.poster_path}`} className="" />
             <div className="date font-light">{movie.release_date}</div>
-            <div className="rate text-red-600 underline">{movie.vote_average}</div>
+            <div className="rate text-red-600 text-lg font-bold underline">{movie.vote_average}</div>
           </div>
         );
       })}

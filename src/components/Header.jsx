@@ -1,14 +1,31 @@
 import React from "react";
 import Wrapper from "./Wrapper";
-import { searchMovie } from "../api";
+import { getMovieList, searchMovie } from "../api";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Header = () => {
 
-  const search = async(q) => {
-    const query = await searchMovie(q)
-    console.log(query)
-}
-    
+  const [popular, setPopular] = useState([]);
+
+  useEffect(() => {
+    getMovieList().then((result) => {
+      setPopular(result);
+    });
+  }, []);
+
+  
+  const search = async (q) => {
+    if (q.length > 3) {
+      const query = await searchMovie(q);
+      setPopular(query.results);
+    } else if (q.length === 0) {
+      getMovieList().then((result) => {
+        setPopular(result);
+      });
+    }
+  };
+
   return (
     <header className="w-full flex flex-col items-center gap-y-3 ">
       <h1 className="text-2xl font-semibold text-center text-white">
@@ -18,11 +35,10 @@ const Header = () => {
         type="text"
         placeholder="cari film mu..."
         className="bg-white p-2 rounded w-1/2"
-        onChange={(target) => search(target.value)}
+        onChange={({ target }) => search(target.value)}
       />
       <div className="w-full flex justify-center gap-5 items-center flex-wrap">
-        <Wrapper />
-        <Wrapper />
+        <Wrapper popular={popular}/>
       </div>
     </header>
   );
